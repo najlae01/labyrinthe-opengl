@@ -122,7 +122,7 @@ void GameObject::LoadMesh(const std::string& objFilePath, const char* texturePat
 	TextureLoader::loadTexture(texturePath, texture);
 }
 
-void GameObject::drawObject(GLuint modelLoc) {
+void GameObject::drawObject(GLint& modelLoc) {
 	glBindVertexArray(VAO);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(m_pos));

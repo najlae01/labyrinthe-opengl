@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 
 void BasicDemo::InitializePhysics() {
@@ -36,6 +37,7 @@ void BasicDemo::CreateObjects() {
 	// create a maze 
 	glm::mat4 mazePos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
 	CreateGameObject("models/mazeY.obj", "textures/maze.jpg", mazePos, new btBoxShape(btVector3(1, 50, 50)), 0, btVector3(0.2f, 0.6f, 0.6f), btVector3(0.0f, -4.0f, -10.0f));
+	
 	
 	// create a ground plane
 	glm::mat4 groundPos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));

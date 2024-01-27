@@ -45,7 +45,7 @@ public:
 
 	btVector3 GetColor() { return m_color; }
 
-	void drawObject(GLuint modelLoc);
+	void drawObject(GLint& modelLoc);
 
 private:	
 

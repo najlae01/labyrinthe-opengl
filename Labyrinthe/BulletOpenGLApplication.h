@@ -89,11 +89,45 @@ public:
 		const btQuaternion& initialRotation = btQuaternion(0, 0, 1, 1)
 	);
 
+
+
+protected:
+	// camera control
+	btVector3 m_cameraPosition; // the camera's current position
+	btVector3 m_cameraTarget;	 // the camera's lookAt target
+	float m_nearPlane; // minimum distance the camera will render
+	float m_farPlane; // farthest distance the camera will render
+	btVector3 m_upVector; // keeps the camera rotated correctly
+	float m_cameraDistance; // distance from the camera to its target
+	float m_cameraPitch; // pitch of the camera 
+	float m_cameraYaw; // yaw of the camera
+	Camera cam;
+
+	int m_screenWidth;
+	int m_screenHeight;
+
+	// core Bullet components
+	btBroadphaseInterface* m_pBroadphase;
+	btCollisionConfiguration* m_pCollisionConfiguration;
+	btCollisionDispatcher* m_pDispatcher;
+	btConstraintSolver* m_pSolver;
+	btDynamicsWorld* m_pWorld;
+
+	// a simple clock for counting time
+	btClock m_clock;
+
+	// an array of our game objects
+	GameObjects m_objects;
+
+	// debug renderer
+	DebugDrawer* m_pDebugDrawer;
+
 	GLint projLoc;
 	GLint modelLoc;
 	GLint viewLoc;
 	glm::mat4 projection;
 	GLuint shaderProgram;
+	GLuint VAO[3], VBO[3], textures;
 	const char* vertexShaderSource = R"(
 		#version 330
 
@@ -134,37 +168,6 @@ public:
 	float agentSpeed = 0.015f;
 	GLfloat lastX = 1400 / 2.0f;
 	GLfloat lastY = 800 / 2.0f;
-
-protected:
-	// camera control
-	btVector3 m_cameraPosition; // the camera's current position
-	btVector3 m_cameraTarget;	 // the camera's lookAt target
-	float m_nearPlane; // minimum distance the camera will render
-	float m_farPlane; // farthest distance the camera will render
-	btVector3 m_upVector; // keeps the camera rotated correctly
-	float m_cameraDistance; // distance from the camera to its target
-	float m_cameraPitch; // pitch of the camera 
-	float m_cameraYaw; // yaw of the camera
-	Camera cam;
-
-	int m_screenWidth;
-	int m_screenHeight;
-
-	// core Bullet components
-	btBroadphaseInterface* m_pBroadphase;
-	btCollisionConfiguration* m_pCollisionConfiguration;
-	btCollisionDispatcher* m_pDispatcher;
-	btConstraintSolver* m_pSolver;
-	btDynamicsWorld* m_pWorld;
-
-	// a simple clock for counting time
-	btClock m_clock;
-
-	// an array of our game objects
-	GameObjects m_objects;
-
-	// debug renderer
-	DebugDrawer* m_pDebugDrawer;
 };
 
 

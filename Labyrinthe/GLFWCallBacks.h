@@ -91,18 +91,34 @@ int glfwmain(int width, int height, BulletOpenGLApplication* pApp) {
     glfwSetCursorPosCallback(window, MouseCallback);
     glfwSetWindowSizeCallback(window, ReshapeCallback);
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glClearColor(0.0f, 0.1f, 0.1f, 1.0f);
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+
     // perform one render before we launch the application
     g_pApp->Idle(window);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         // poll for and process events
-        glfwPollEvents();
+        //glfwPollEvents();
+        
         // render here
         g_pApp->Idle(window);
 
+        // swap front and back buffers
+        glfwSwapBuffers(window);
+
+        // poll for and process events
+        glfwPollEvents();
     }
 
     // cleanup and exit

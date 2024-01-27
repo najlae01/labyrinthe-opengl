@@ -13,9 +13,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "ObjLoader.h"
+#include "TextureLoader.h"
+
 // Some constants for 3D math and the camera speed
 #define RADIANS_PER_DEGREE 0.01745329f
 #define CAMERA_STEP_SIZE 5.0f
+
 
 BulletOpenGLApplication::BulletOpenGLApplication() :
 	m_cameraPosition(10.0f, 5.0f, 0.0f),
@@ -99,13 +103,18 @@ void BulletOpenGLApplication::Initialize() {
 	projection = glm::perspective(glm::radians(45.0f), (float)1400 / (float)800, 0.1f, 100.0f);
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
+	glm::mat4 view = cam.GetViewMatrix(glm::vec3(0.0f, -3.0f, -10.0f));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+	std::cout << shaderProgram;
 
 	// create the debug drawer
 	m_pDebugDrawer = new DebugDrawer();
 	// set the initial debug level to 0
-	m_pDebugDrawer->setDebugMode(0);
+	m_pDebugDrawer->setDebugMode(1);
 	// add the debug drawer to the world
 	m_pWorld->setDebugDrawer(m_pDebugDrawer);
+
 }
 
 void BulletOpenGLApplication::Keyboard(GLFWwindow* window, unsigned char key, int x, int y) {
@@ -189,8 +198,6 @@ void BulletOpenGLApplication::Idle(GLFWwindow* window) {
 	// render the scene
 	RenderScene();
 
-	// swap the front and back buffers
-	glfwSwapBuffers(window);
 }
 
 void BulletOpenGLApplication::Mouse(GLFWwindow* window, double xpos, double ypos) {
@@ -216,9 +223,6 @@ void BulletOpenGLApplication::UpdateCamera() {
 	// exit in erroneous situations
 	if (m_screenWidth == 0 && m_screenHeight == 0)
 		return;
-
-	// clear the backbuffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 view = cam.GetViewMatrix(glm::vec3(0.0f, -3.0f, -10.0f));
 	//glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 8.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -316,14 +320,16 @@ void BulletOpenGLApplication::ZoomCamera(float distance) {
 }
 
 void BulletOpenGLApplication::RenderScene() {
-	
+	// clear the backbuffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// iterate through all of the objects in our world
 	for (GameObjects::iterator i = m_objects.begin(); i != m_objects.end(); ++i) {
 		// get the object from the iterator
 		GameObject* pObj = *i;
 
 		// draw the object
-		//std::cout << "Drawing object n" << pObj << std::endl;
+		//std::cout << "Drawing object in " << modelLoc << std::endl;
 		pObj->drawObject(modelLoc);
 	}
 
