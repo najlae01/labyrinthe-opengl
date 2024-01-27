@@ -1,0 +1,16 @@
+﻿  main.cpp
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(113,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(114,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(118,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(119,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(121,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(122,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(129,42): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(132,43): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(135,46): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(138,46): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(357,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(364,58): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(371,59): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Labyrinthe.vcxproj -> C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\x64\Debug\Labyrinthe.exe

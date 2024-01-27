@@ -1,0 +1,83 @@
+﻿  ObjLoader.cpp
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\ObjLoader.cpp(20,48): warning C4244: 'argument': conversion from 'int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\ObjLoader.cpp(28,26): warning C4244: 'initializing': conversion from '_Ty' to 'size_t', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\ObjLoader.cpp(33,26): warning C4244: 'initializing': conversion from '_Ty' to 'size_t', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\ObjLoader.cpp(38,26): warning C4244: 'initializing': conversion from '_Ty' to 'size_t', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\ObjLoader.cpp(55,34): warning C4244: 'initializing': conversion from '_Ty' to 'size_t', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\ObjLoader.cpp(59,35): warning C4244: 'initializing': conversion from '_Ty' to 'size_t', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+  main.cpp
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(107,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(108,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(112,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(113,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(115,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(116,13): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(123,42): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(126,43): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(129,46): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(132,46): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating Code...
+main.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwInit referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwTerminate referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwWindowHint referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwCreateWindow referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwWindowShouldClose referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwSetWindowShouldClose referenced in function "void __cdecl keyCallback(struct GLFWwindow *,int,int,int,int)" (?keyCallback@@YAXPAUGLFWwindow@@HHHH@Z)
+main.obj : error LNK2019: unresolved external symbol _glfwSetWindowSizeCallback referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwPollEvents referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwSetInputMode referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwSetKeyCallback referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwSetCursorPosCallback referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwMakeContextCurrent referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _glfwSwapBuffers referenced in function _main
+main.obj : error LNK2019: unresolved external symbol _SOIL_load_image referenced in function "public: static unsigned int __cdecl TextureLoader::loadTexture(char const *,unsigned int)" (?loadTexture@TextureLoader@@SAIPBDI@Z)
+main.obj : error LNK2019: unresolved external symbol _SOIL_free_image_data referenced in function "public: static unsigned int __cdecl TextureLoader::loadTexture(char const *,unsigned int)" (?loadTexture@TextureLoader@@SAIPBDI@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewBindBuffer referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewBufferData referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewGenBuffers referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewAttachShader referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewCompileShader referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewCreateProgram referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewCreateShader referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewEnableVertexAttribArray referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetShaderInfoLog referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetShaderiv referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetUniformLocation referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewLinkProgram referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewShaderSource referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewUniformMatrix4fv referenced in function "void __cdecl windowResizeCallback(struct GLFWwindow *,int,int)" (?windowResizeCallback@@YAXPAUGLFWwindow@@HH@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUseProgram referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewVertexAttribPointer referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewBindVertexArray referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewGenVertexArrays referenced in function _main
+C:\opengl\glew\glew-2.1.0\lib\Release\x64\glew32s.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\opengl\glfw-3.3.9.bin.WIN64\lib-vc2022\glfw3.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\opengl\glfw-3.3.9.bin.WIN64\lib-vc2022\glfw3dll.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\opengl\glew\glew-2.1.0\lib\Release\x64\glew32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\\External_Libraries\SOIL2\lib\soil2-debug.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Debug\Labyrinthe.exe : fatal error LNK1120: 34 unresolved externals

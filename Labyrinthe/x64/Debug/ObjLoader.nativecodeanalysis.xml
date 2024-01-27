@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\</FILEPATH>
+      <FILENAME>ObjLoader.cpp</FILENAME>
+      <LINE>33</LINE>
+      <COLUMN>43</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>ObjLoader::create_sorted_vertex_buffer</FUNCTION>
+    <DECORATED>?create_sorted_vertex_buffer@ObjLoader@@SAXAEBV?$vector@MV?$allocator@M@std@@@std@@000@Z</DECORATED>
+    <FUNCLINE>25</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\</FILEPATH>
+      <FILENAME>ObjLoader.cpp</FILENAME>
+      <LINE>38</LINE>
+      <COLUMN>43</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>ObjLoader::create_sorted_vertex_buffer</FUNCTION>
+    <DECORATED>?create_sorted_vertex_buffer@ObjLoader@@SAXAEBV?$vector@MV?$allocator@M@std@@@std@@000@Z</DECORATED>
+    <FUNCLINE>25</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\</FILEPATH>
+      <FILENAME>ObjLoader.cpp</FILENAME>
+      <LINE>28</LINE>
+      <COLUMN>43</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>ObjLoader::create_sorted_vertex_buffer</FUNCTION>
+    <DECORATED>?create_sorted_vertex_buffer@ObjLoader@@SAXAEBV?$vector@MV?$allocator@M@std@@@std@@000@Z</DECORATED>
+    <FUNCLINE>25</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\</FILEPATH>
+      <FILENAME>ObjLoader.cpp</FILENAME>
+      <LINE>55</LINE>
+      <COLUMN>56</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>ObjLoader::create_unsorted_vertex_buffer</FUNCTION>
+    <DECORATED>?create_unsorted_vertex_buffer@ObjLoader@@SAXAEBV?$vector@MV?$allocator@M@std@@@std@@000@Z</DECORATED>
+    <FUNCLINE>45</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\</FILEPATH>
+      <FILENAME>ObjLoader.cpp</FILENAME>
+      <LINE>59</LINE>
+      <COLUMN>57</COLUMN>
+    </SFA>
+    <DEFECTCODE>26451</DEFECTCODE>
+    <DESCRIPTION>Arithmetic overflow: Using operator '*' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow (io.2).</DESCRIPTION>
+    <FUNCTION>ObjLoader::create_unsorted_vertex_buffer</FUNCTION>
+    <DECORATED>?create_unsorted_vertex_buffer@ObjLoader@@SAXAEBV?$vector@MV?$allocator@M@std@@@std@@000@Z</DECORATED>
+    <FUNCLINE>45</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>
