@@ -168,6 +168,7 @@ protected:
 	float agentSpeed = 0.015f;
 	GLfloat lastX = 1400 / 2.0f;
 	GLfloat lastY = 800 / 2.0f;
+	void doMovement();
 };
 
 

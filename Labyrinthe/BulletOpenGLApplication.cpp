@@ -106,8 +106,6 @@ void BulletOpenGLApplication::Initialize() {
 	glm::mat4 view = cam.GetViewMatrix(glm::vec3(0.0f, -3.0f, -10.0f));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-	std::cout << shaderProgram;
-
 	// create the debug drawer
 	m_pDebugDrawer = new DebugDrawer();
 	// set the initial debug level to 0
@@ -146,24 +144,28 @@ void BulletOpenGLApplication::KeyCallback(GLFWwindow* window, int key, int scanc
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+		std::cout << "W" << std::endl;
 		forward = true;
 	}
 	else if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
 		forward = false;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+		std::cout << "S" << std::endl;
 		backward = true;
 	}
 	else if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
 		backward = false;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+		std::cout << "A" << std::endl;
 		left = true;
 	}
 	else if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
 		left = false;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+		std::cout << "D" << std::endl;
 		right = true;
 	}
 	else if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
@@ -179,12 +181,27 @@ void BulletOpenGLApplication::Reshape(GLFWwindow* window, int w, int h) {
 	//UpdateCamera();
 }
 
+void BulletOpenGLApplication::doMovement() {
+	if (left) {
+		cam.ProcessKeyboard("LEFT", 0.015);
+	}
+	if (right) {
+		cam.ProcessKeyboard("RIGHT", 0.015);
+	}
+	if (forward) {
+		cam.ProcessKeyboard("FORWARD", 0.0015);
+	}
+	if (backward) {
+		cam.ProcessKeyboard("BACKWARD", 0.015);
+	}
+}
+
 void BulletOpenGLApplication::Idle(GLFWwindow* window) {
 	// this function is called frequently, whenever FreeGlut
 	// isn't busy processing its own events. It should be used
 	// to perform any updating and rendering tasks
 
-
+	doMovement();
 	// get the time since the last iteration
 	float dt = m_clock.getTimeMilliseconds();
 	// reset the clock to 0
@@ -225,7 +242,7 @@ void BulletOpenGLApplication::UpdateCamera() {
 		return;
 
 	glm::mat4 view = cam.GetViewMatrix(glm::vec3(0.0f, -3.0f, -10.0f));
-	//glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 8.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 8.0f), glm::vec3(0.0f, -4.0f, -10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	// the view matrix is now set
 }
