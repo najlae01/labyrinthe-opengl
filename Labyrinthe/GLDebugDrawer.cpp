@@ -1,6 +1,3 @@
-//
-// Created by AICDG on 2017/8/9.
-//
 
 #include "GLDebugDrawer.h"
 #include "BulletOpenGLApplication.h"

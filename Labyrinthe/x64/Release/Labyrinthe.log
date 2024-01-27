@@ -1,4 +1,20 @@
-﻿  main.cpp
+﻿  BasicDemo.cpp
+  BulletOpenGLApplication.cpp
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(182,31): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(185,32): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(188,34): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(191,35): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(202,11): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'float', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(218,11): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(219,11): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(223,18): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(224,18): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(226,10): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\BulletOpenGLApplication.cpp(227,10): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+  GLDebugDrawer.cpp
+  GameObject.cpp
+C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\GameObject.cpp(126,44): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  main.cpp
 C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(204,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
 C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(205,17): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
 C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(209,21): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
@@ -14,7 +30,7 @@ C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(524
 C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(533,56): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
 C:\Users\MSI\Documents\visualStudio-workspace\Labyrinthe\Labyrinthe\main.cpp(541,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   Generating code
-  1 of 932 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  0 of 932 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

@@ -1,7 +1,3 @@
-//
-// Created by AICDG on 2017/8/9.
-//
-
 #include "BasicDemo.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

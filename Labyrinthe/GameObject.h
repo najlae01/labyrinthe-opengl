@@ -1,6 +1,4 @@
-//
-// Created by AICDG on 2017/8/9.
-//
+
 
 #ifndef BULLETOPENGL_GAMEOBJECT_H
 #define BULLETOPENGL_GAMEOBJECT_H

@@ -1,6 +1,3 @@
-//
-// Created by AICDG on 2017/8/9.
-//
 
 #ifndef BULLETOPENGL_GLFWCALLBACKS_H
 #define BULLETOPENGL_GLFWCALLBACKS_H
