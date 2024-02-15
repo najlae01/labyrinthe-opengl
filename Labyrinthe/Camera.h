@@ -9,21 +9,16 @@
 class Camera {
 public:
     Camera()
-        : camera_pos(glm::vec3(0.0f, 0.0f, 8.0f)),
-        camera_front(glm::vec3(0.0f, 0.0f, 1.0f)),
+        : camera_pos(glm::vec3(2.0f, 30.0f, -10.0f)),
+        camera_front(glm::vec3(0.0f, 0.0f, -1.0f)),
         camera_up(glm::vec3(0.0f, 1.0f, 0.0f)),
         camera_right(glm::vec3(1.0f, 0.0f, 0.0f)),
         mouse_sensitivity(0.25f),
         yaw(-90.0f),
         pitch(0.0f) {}
 
-    glm::mat4 GetViewMatrix(glm::vec3 target_pos = glm::vec3(0.0f, -4.0f, -10.0f)) {
-        if (target_pos != glm::vec3(0.0f)) {
-            return glm::lookAt(camera_pos, target_pos + camera_front, camera_up);
-        }
-        else {
-            return glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
-        }
+    glm::mat4 GetViewMatrix(glm::vec3 target_pos) {
+        return glm::lookAt(camera_pos, target_pos , glm::vec3(0.0f, 0.0f, -1.0f));
     }
 
     void ProcessMouseMovement(float xoffset, float yoffset, bool constrain_pitch) {

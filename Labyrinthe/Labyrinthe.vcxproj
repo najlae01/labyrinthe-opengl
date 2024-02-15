@@ -173,6 +173,7 @@
     <ClCompile Include="GLDebugDrawer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="ObjWGroupsLoader.cpp" />
     <ClCompile Include="TempCam.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="vector3d.cpp" />
@@ -184,7 +185,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GLDebugDrawer.h" />
     <ClInclude Include="GLFWCallBacks.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="ObjWGroupsLoader.h" />
     <ClInclude Include="OpenGLMotionState.h" />
     <ClInclude Include="TempCam.h" />
     <ClInclude Include="TextureLoader.h" />

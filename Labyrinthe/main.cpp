@@ -12,9 +12,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <Bullet/btBulletCollisionCommon.h>
-#include <Bullet/btBulletDynamicsCommon.h>
-#include <Bullet/Serialize/BulletFileLoader/btBulletFile.h>
 
 
 #include "ObjLoader.h"
@@ -22,6 +19,8 @@
 #include "Camera.h"
 #include "GLDebugDrawer.h"
 #include "OpenGLMotionState.h"
+#include "Mesh.h"
+#include "ObjWGroupsLoader.h"
 
 
 GLuint WIDTH = 1280;
@@ -38,11 +37,49 @@ float agentSpeed = 0.015f;
 Camera cam;
 GLint projLoc;
 
-GLuint VAO[3];
-GLuint VBO[3];
-GLuint textures[3];
+GLuint VAO[4];
+GLuint VBO[4];
+GLuint textures[4];
 
-DebugDrawer* myDrawer;
+// Function to calculate the bounding box of a mesh
+std::pair<glm::vec3, glm::vec3> calculateBoundingBox(const Mesh& mesh) {
+    glm::vec3 minBounds(FLT_MAX);
+    glm::vec3 maxBounds(-FLT_MAX);
+
+    // Iterate over mesh data to find vertices
+    for (const std::string& line : mesh.data) {
+        // Process line to find vertices
+        if (line.substr(0, 2) == "v ") {
+            float x, y, z;
+            sscanf_s(line.c_str(), "v %f %f %f", &x, &y, &z);
+
+            // Update minBounds and maxBounds based on vertex coordinates
+            minBounds.x = std::min(minBounds.x, x);
+            minBounds.y = std::min(minBounds.y, y);
+            minBounds.z = std::min(minBounds.z, z);
+
+            maxBounds.x = std::max(maxBounds.x, x);
+            maxBounds.y = std::max(maxBounds.y, y);
+            maxBounds.z = std::max(maxBounds.z, z);
+        }
+    }
+
+    return { minBounds, maxBounds };
+}
+
+// Function to check for collision between two bounding boxes
+bool checkCollision(const glm::vec3& agentMinBounds, const glm::vec3& agentMaxBounds,
+    const glm::vec3& wallMinBounds, const glm::vec3& wallMaxBounds) {
+    // Check for intersection between bounding boxes
+    if (agentMaxBounds.x >= wallMinBounds.x && agentMinBounds.x <= wallMaxBounds.x &&
+        agentMaxBounds.y >= wallMinBounds.y && agentMinBounds.y <= wallMaxBounds.y &&
+        agentMaxBounds.z >= wallMinBounds.z && agentMinBounds.z <= wallMaxBounds.z) {
+        return true; // Collision detected
+    }
+    return false; // No collision
+}
+
+
 
 int debugMode = 1;
 
@@ -80,86 +117,6 @@ const char* fragmentShaderSource = R"(
         out_color = texture(s_texture, v_texture);
     }
 )";
-
-// Bullet physics variables
-btBroadphaseInterface* broadphase;
-btDefaultCollisionConfiguration* collisionConfiguration;
-btCollisionDispatcher* dispatcher;
-btSequentialImpulseConstraintSolver* solver;
-btDiscreteDynamicsWorld* dynamicsWorld;
-
-void initBullet() {
-    // Create the broadphase
-    broadphase = new btDbvtBroadphase();
-
-    // Set up the collision configuration and dispatcher
-    collisionConfiguration = new btDefaultCollisionConfiguration();
-    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-    // The actual physics solver
-    solver = new btSequentialImpulseConstraintSolver;
-
-    // The world
-    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-
-    // Set gravity
-    dynamicsWorld->setGravity(btVector3(0, -10, 0));
-
-
-    //  set the debug drawer
-    myDrawer = new DebugDrawer();
-    dynamicsWorld->setDebugDrawer(myDrawer);
-
-    myDrawer->setDebugMode(debugMode);
-
-    // Optionally enable debug drawing - replace with your own key/button handling
-    dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-
-    // Set the debug drawer for the Bullet world
-    dynamicsWorld->setDebugDrawer(myDrawer);
-}
-
-btRigidBody* createRigidBody(btCollisionShape* shape, btScalar mass, const btVector3& pos, bool isKinematic = false) {
-    // Calculate inertia
-    btVector3 inertia(0, 0, 0);
-    shape->calculateLocalInertia(mass, inertia);
-
-    btTransform initialTransform;
-    initialTransform.setIdentity();
-    initialTransform.setOrigin(pos);
-
-    // Create motion state
-    btDefaultMotionState* motionState = new OpenGLMotionState(initialTransform);
-
-    // Create rigid body
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape, inertia);
-    btRigidBody* body = new btRigidBody(rbInfo);
-
-    body->clearForces();
-    body->setLinearVelocity(btVector3(0, 0, 0));
-    body->setWorldTransform(initialTransform);
-
-    // objects of infinite mass can't
-    // move or rotate
-    if (mass != 0.0f) {
-        shape->calculateLocalInertia(mass, inertia);
-    }
-
-
-    // Set additional properties for the agent (kinematic)
-    if (isKinematic) {
-        body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-        body->setActivationState(ACTIVE_TAG);
-        body->setActivationState(DISABLE_DEACTIVATION);
-    }
-
-    // Add rigid body to the dynamics world
-    dynamicsWorld->addRigidBody(body);
-
-    return body;
-}
-
-
 
 void checkGLError() {
     GLenum error = glGetError();
@@ -275,8 +232,6 @@ int main() {
         return -1;
     }
 
-    // Initialize Bullet
-    initBullet();
 
     glfwSetKeyCallback(window, keyCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
@@ -327,12 +282,58 @@ int main() {
     glLinkProgram(shaderProgram);
 
 
-
-
     // Load 3D meshes
     std::pair<std::vector<uint32_t>, std::vector<float>> mazeModel = ObjLoader::loadModel("models/mazeY.obj", true);
     std::pair<std::vector<uint32_t>, std::vector<float>> agentModel = ObjLoader::loadModel("models/agentY.obj", true);
     std::pair<std::vector<uint32_t>, std::vector<float>> groundModel = ObjLoader::loadModel("models/groundY.obj", true);
+
+    ObjWGroupsLoader objLoaderWGroups = ObjWGroupsLoader();
+    std::vector<Mesh> MazeColliders = objLoaderWGroups.loadObj("models/mazeY_collider_NoTextures.obj");
+
+    // Check if loading the OBJ file was successful
+    if (MazeColliders.empty()) {
+        std::cerr << "Error: Failed to load OBJ file." << std::endl;
+        return -1; // or handle the error accordingly
+    }
+
+    // Initialize vectors to store vertices and indices
+    std::vector<float> mazeCollidersBuffer;
+    std::vector<uint32_t> mazeCollidersIndices;
+
+    // Iterate over each mesh in MazeColliders
+    for (const auto& mesh : MazeColliders) {
+        // Iterate over each line of data in the mesh
+        for (const auto& line : mesh.data) {
+            // Check if the line represents a vertex
+            if (line.substr(0, 2) == "v ") {
+                // Extract vertex coordinates from the line
+                float x, y, z;
+                sscanf(line.c_str(), "v %f %f %f", &x, &y, &z);
+                // Add vertex coordinates to the buffer
+                mazeCollidersBuffer.push_back(x);
+                mazeCollidersBuffer.push_back(y);
+                mazeCollidersBuffer.push_back(z);
+                //std::cout << "Line: " << line << std::endl;
+                //std::cout << "Vertex: " << x << ", " << y << ", " << z << std::endl;
+
+            }
+            // Check if the line represents a face
+            else if (line.substr(0, 2) == "f ") {
+                // Extract face indices from the line
+                uint32_t idx1, idx2, idx3;
+                sscanf(line.c_str(), "f %u %u %u", &idx1, &idx2, &idx3);
+                // OBJ file indices start from 1, so decrement them by 1 to get zero-based indices
+                idx1--; idx2--; idx3--;
+                // Add face indices to the indices vector
+                mazeCollidersIndices.push_back(idx1);
+                mazeCollidersIndices.push_back(idx2);
+                mazeCollidersIndices.push_back(idx3);
+                //std::cout << "Line: " << line << std::endl;
+                //std::cout << "Indices: " << idx1 << ", " << idx2 << ", " << idx3 << std::endl;
+            }
+        }
+    }
+
 
 
     // Access the loaded data
@@ -345,11 +346,11 @@ int main() {
 
 
     // Generate Vertex Array Objects (VAOs)
-    glGenVertexArrays(3, VAO);
+    glGenVertexArrays(4, VAO);
     //checkGLError();
 
     // Generate Vertex Buffer Objects (VBOs)
-    glGenBuffers(3, VBO);
+    glGenBuffers(4, VBO);
     //checkGLError();
 
 
@@ -369,6 +370,7 @@ int main() {
     // maze normals
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+
 
     // Agent VAO
     glBindVertexArray(VAO[1]);
@@ -404,52 +406,25 @@ int main() {
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 
+    // Create and bind VAO for maze colliders
+    GLuint mazeCollidersVAO, mazeCollidersVBO, mazeCollidersEBO;
+    glGenVertexArrays(1, &mazeCollidersVAO);
+    glGenBuffers(1, &mazeCollidersVBO);
+    glGenBuffers(1, &mazeCollidersEBO);
 
-    // Load the maze visual shape
-    btTriangleMesh* mazeMesh = new btTriangleMesh();
+    glBindVertexArray(mazeCollidersVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, mazeCollidersVBO);
+    glBufferData(GL_ARRAY_BUFFER, mazeCollidersBuffer.size() * sizeof(float), mazeCollidersBuffer.data(), GL_STATIC_DRAW);
 
-    // Load the mesh from file
-    btVector3 scaling(1, 1, 1);
-    std::pair<std::vector<uint32_t>, std::vector<float>> mazeColliderModel = ObjLoader::loadModel("models/mazeY_collider.obj", true);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mazeCollidersEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mazeCollidersIndices.size() * sizeof(uint32_t), mazeCollidersIndices.data(), GL_STATIC_DRAW);
 
-    // the vertices and indices are in the returned pair
-    const std::vector<float>& vertices = mazeColliderModel.second;
-    const std::vector<uint32_t>& indices = mazeColliderModel.first;
+    // Set vertex attribute pointers
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-    for (size_t i = 0; i < indices.size(); i += 3) {
-        // Indices point to the vertices in the 'vertices' array
-        size_t index1 = indices[i];
-        size_t index2 = indices[i + 1];
-        size_t index3 = indices[i + 2];
-
-        // Extract vertices from the 'vertices' array
-        if (index1 * 8 + 2 < vertices.size()) {
-            btVector3 vertex1(vertices[index1 * 8], vertices[index1 * 8 + 1], vertices[index1 * 8 + 2]);
-            btVector3 vertex2(vertices[index2 * 8], vertices[index2 * 8 + 1], vertices[index2 * 8 + 2]);
-            btVector3 vertex3(vertices[index3 * 8], vertices[index3 * 8 + 1], vertices[index3 * 8 + 2]);
-            // Add the triangle to the mesh
-            mazeMesh->addTriangle(vertex1, vertex2, vertex3, true);
-        }
-        else {
-            // Handle the case where the index is out of bounds
-            std::cerr << "Error: Invalid index1 in vertices vector." << std::endl;
-        }
-    }
-
-
-    btCollisionShape* mazeShape = new btBvhTriangleMeshShape(mazeMesh, true, true);
-
-
-    // Create Bullet collision shapes and rigid bodies for the other objects
-    btCollisionShape* agentShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f));
-    btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
-
-    btRigidBody* mazeRigidBody = createRigidBody(mazeShape, 0, btVector3(0.0f, -4.0f, -10.0f));
-
-    btVector3 agentInitialPos(agentPos.x, agentPos.y, agentPos.z);
-    btRigidBody* agentRigidBody = createRigidBody(agentShape, 0.2, agentInitialPos, true);  // Set mass different than 0 for dynamic body
-
-    btRigidBody* groundRigidBody = createRigidBody(groundShape, 0, btVector3(0.0f, -4.0f, -10.0f));
+    // Unbind VAO
+    //glBindVertexArray(0);
 
 
     glGenTextures(3, textures);
@@ -476,36 +451,64 @@ int main() {
 
 
 
+    glm::vec3 agentMinBounds(FLT_MAX);
+    glm::vec3 agentMaxBounds(-FLT_MAX);
+
+    for (size_t i = 0; i < agentBuffer.size(); i += 8) {
+        glm::vec3 vertex(agentBuffer[i], agentBuffer[i + 1], agentBuffer[i + 2]);
+
+        // Update minimum bounds
+        agentMinBounds.x = std::min(agentMinBounds.x, vertex.x);
+        agentMinBounds.y = std::min(agentMinBounds.y, vertex.y);
+        agentMinBounds.z = std::min(agentMinBounds.z, vertex.z);
+
+        // Update maximum bounds
+        agentMaxBounds.x = std::max(agentMaxBounds.x, vertex.x);
+        agentMaxBounds.y = std::max(agentMaxBounds.y, vertex.y);
+        agentMaxBounds.z = std::max(agentMaxBounds.z, vertex.z);
+    }
+
+
+
+
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         doMovement();
-        dynamicsWorld->stepSimulation(1 / 60.f, 10);
-        dynamicsWorld->performDiscreteCollisionDetection();
 
-        btVector3 btAgentPos(agentPos.x, agentPos.y, agentPos.z);
+        // Update the position of the agent
+        glm::vec3 newAgentPos = agentPos;
         if (left) {
-            agentPos.x -= agentSpeed;
-            btAgentPos.setX(btAgentPos.getX() - agentSpeed);
-            btAgentPos.normalize();
-            agentRigidBody->setLinearVelocity(btAgentPos);
+            newAgentPos.x -= agentSpeed;
         }
         if (right) {
-            agentPos.x += agentSpeed;
-            btAgentPos.setX(btAgentPos.getX() + agentSpeed);
-            btAgentPos.normalize();
-            agentRigidBody->setLinearVelocity(btAgentPos);
+            newAgentPos.x += agentSpeed;
         }
         if (forward) {
-            agentPos.z -= agentSpeed;
-            btAgentPos.setZ(btAgentPos.getZ() - agentSpeed);
-            btAgentPos.normalize();
-            agentRigidBody->setLinearVelocity(btAgentPos);
+            newAgentPos.z -= agentSpeed;
         }
         if (backward) {
-            agentPos.z += agentSpeed;
-            btAgentPos.setZ(btAgentPos.getZ() + agentSpeed);
-            btAgentPos.normalize();
-            agentRigidBody->setLinearVelocity(btAgentPos);
+            newAgentPos.z += agentSpeed;
+        }
+
+        bool collisionDetected = false;
+
+        // Iterate over each wall (sub-object) in MazeColliders
+        for (const Mesh& wall : MazeColliders) {
+            // Calculate bounding box of current wall
+            glm::vec3 wallMinBounds, wallMaxBounds;
+            std::tie(wallMinBounds, wallMaxBounds) = calculateBoundingBox(wall);
+
+            // Check for collision between agent and current wall
+            if (checkCollision(agentMinBounds, agentMaxBounds, wallMinBounds, wallMaxBounds)) {
+                collisionDetected = true;
+                std::cout << "Collision detected with wall: " << wall.name << std::endl;
+            }
+        }
+
+
+        // Update the agent's position if no collision detected
+        if (!collisionDetected) {
+            agentPos = newAgentPos;
         }
 
 
@@ -522,6 +525,7 @@ int main() {
         glm::mat4 cubePos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(cubePos));
         glDrawArrays(GL_TRIANGLES, 0, mazeIndices.size());
+        glPopMatrix();
 
         // Draw the agent
         glBindVertexArray(VAO[1]);
@@ -539,26 +543,22 @@ int main() {
         glm::mat4 groundPos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(groundPos));
         glDrawArrays(GL_TRIANGLES, 0, groundIndices.size());
+        glPopMatrix();
 
+        // Draw the colliders
+        // Bind maze colliders VAO
+        glBindVertexArray(mazeCollidersVAO);
+        glm::mat4 collidersPos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(collidersPos));
+        glDrawArrays(GL_TRIANGLES, 0, mazeCollidersIndices.size());
 
-        dynamicsWorld->stepSimulation(1 / 60.f, 10);
 
 
         glfwSwapBuffers(window);
     }
 
-    glDeleteVertexArrays(3, VAO);
-    glDeleteBuffers(3, VBO);
-
-    // Clean up Bullet
-    delete dynamicsWorld;
-    delete solver;
-    delete collisionConfiguration;
-    delete dispatcher;
-    delete broadphase;
-
-    // Clean up GLDebugDrawer
-    delete myDrawer;
+    glDeleteVertexArrays(4, VAO);
+    glDeleteBuffers(4, VBO);
 
     glfwTerminate();
     return 0;
