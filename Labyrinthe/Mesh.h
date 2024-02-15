@@ -16,6 +16,7 @@
 
 struct Mesh {
     std::string name; // represents the name of the mesh
+    std::vector<int> facesValues;
     std::vector<std::string> data; // contains the raw data lines from the OBJ file
     int firstFaceValue; // represents the value of the first face index encountered
     bool hasFirstFaceValue; // flag indicating whether the first face index has been set

@@ -9,7 +9,7 @@
 class Camera {
 public:
     Camera()
-        : camera_pos(glm::vec3(2.0f, 30.0f, -10.0f)),
+        : camera_pos(glm::vec3(2.0f, 20.0f, -10.0f)),
         camera_front(glm::vec3(0.0f, 0.0f, -1.0f)),
         camera_up(glm::vec3(0.0f, 1.0f, 0.0f)),
         camera_right(glm::vec3(1.0f, 0.0f, 0.0f)),

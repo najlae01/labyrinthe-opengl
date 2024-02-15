@@ -32,7 +32,7 @@ bool firstMouse = true;
 bool left = false, right = false, forward = false, backward = false;
 
 glm::vec3 agentPos(2.0f, -4.0f, -10.0f);
-float agentSpeed = 0.015f;
+float agentSpeed = 0.15f;
 
 Camera cam;
 GLint projLoc;
@@ -174,16 +174,16 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 
 void doMovement() {
     if (left) {
-        cam.ProcessKeyboard("LEFT", 0.015);
+        cam.ProcessKeyboard("LEFT", 0.15);
     }
     if (right) {
-        cam.ProcessKeyboard("RIGHT", 0.015);
+        cam.ProcessKeyboard("RIGHT", 0.15);
     }
     if (forward) {
-        cam.ProcessKeyboard("FORWARD", 0.0015);
+        cam.ProcessKeyboard("FORWARD", 0.15);
     }
     if (backward) {
-        cam.ProcessKeyboard("BACKWARD", 0.015);
+        cam.ProcessKeyboard("BACKWARD", 0.15);
     }
 }
 
@@ -288,51 +288,16 @@ int main() {
     std::pair<std::vector<uint32_t>, std::vector<float>> groundModel = ObjLoader::loadModel("models/groundY.obj", true);
 
     ObjWGroupsLoader objLoaderWGroups = ObjWGroupsLoader();
-    std::vector<Mesh> MazeColliders = objLoaderWGroups.loadObj("models/mazeY_collider_NoTextures.obj");
+    objLoaderWGroups.loadObj("models/mazeY_collider_NoTextures.obj");
+    std::vector<Mesh> MazeColliders = objLoaderWGroups.Meshes;;
 
     // Check if loading the OBJ file was successful
     if (MazeColliders.empty()) {
         std::cerr << "Error: Failed to load OBJ file." << std::endl;
-        return -1; // or handle the error accordingly
+        return -1; 
     }
 
-    // Initialize vectors to store vertices and indices
-    std::vector<float> mazeCollidersBuffer;
-    std::vector<uint32_t> mazeCollidersIndices;
 
-    // Iterate over each mesh in MazeColliders
-    for (const auto& mesh : MazeColliders) {
-        // Iterate over each line of data in the mesh
-        for (const auto& line : mesh.data) {
-            // Check if the line represents a vertex
-            if (line.substr(0, 2) == "v ") {
-                // Extract vertex coordinates from the line
-                float x, y, z;
-                sscanf(line.c_str(), "v %f %f %f", &x, &y, &z);
-                // Add vertex coordinates to the buffer
-                mazeCollidersBuffer.push_back(x);
-                mazeCollidersBuffer.push_back(y);
-                mazeCollidersBuffer.push_back(z);
-                //std::cout << "Line: " << line << std::endl;
-                //std::cout << "Vertex: " << x << ", " << y << ", " << z << std::endl;
-
-            }
-            // Check if the line represents a face
-            else if (line.substr(0, 2) == "f ") {
-                // Extract face indices from the line
-                uint32_t idx1, idx2, idx3;
-                sscanf(line.c_str(), "f %u %u %u", &idx1, &idx2, &idx3);
-                // OBJ file indices start from 1, so decrement them by 1 to get zero-based indices
-                idx1--; idx2--; idx3--;
-                // Add face indices to the indices vector
-                mazeCollidersIndices.push_back(idx1);
-                mazeCollidersIndices.push_back(idx2);
-                mazeCollidersIndices.push_back(idx3);
-                //std::cout << "Line: " << line << std::endl;
-                //std::cout << "Indices: " << idx1 << ", " << idx2 << ", " << idx3 << std::endl;
-            }
-        }
-    }
 
 
 
@@ -347,11 +312,9 @@ int main() {
 
     // Generate Vertex Array Objects (VAOs)
     glGenVertexArrays(4, VAO);
-    //checkGLError();
 
     // Generate Vertex Buffer Objects (VBOs)
     glGenBuffers(4, VBO);
-    //checkGLError();
 
 
     // Maze VAO
@@ -406,25 +369,7 @@ int main() {
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 
-    // Create and bind VAO for maze colliders
-    GLuint mazeCollidersVAO, mazeCollidersVBO, mazeCollidersEBO;
-    glGenVertexArrays(1, &mazeCollidersVAO);
-    glGenBuffers(1, &mazeCollidersVBO);
-    glGenBuffers(1, &mazeCollidersEBO);
 
-    glBindVertexArray(mazeCollidersVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mazeCollidersVBO);
-    glBufferData(GL_ARRAY_BUFFER, mazeCollidersBuffer.size() * sizeof(float), mazeCollidersBuffer.data(), GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mazeCollidersEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mazeCollidersIndices.size() * sizeof(uint32_t), mazeCollidersIndices.data(), GL_STATIC_DRAW);
-
-    // Set vertex attribute pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // Unbind VAO
-    //glBindVertexArray(0);
 
 
     glGenTextures(3, textures);
@@ -513,7 +458,7 @@ int main() {
 
 
         glm::mat4 view = cam.GetViewMatrix(agentPos);
-        //glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 8.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         // Draw the scene
@@ -522,10 +467,10 @@ int main() {
         // Draw the maze
         glBindVertexArray(VAO[0]);
         glBindTexture(GL_TEXTURE_2D, textures[0]);
-        glm::mat4 cubePos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(cubePos));
+        glm::mat4 mazePos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(mazePos));
         glDrawArrays(GL_TRIANGLES, 0, mazeIndices.size());
-        glPopMatrix();
+        
 
         // Draw the agent
         glBindVertexArray(VAO[1]);
@@ -535,7 +480,7 @@ int main() {
         glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(agentPos.x, agentPos.y, agentPos.z));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glDrawArrays(GL_TRIANGLES, 0, agentIndices.size());
-        glPopMatrix();
+        
 
         // Draw the ground
         glBindVertexArray(VAO[2]);
@@ -543,14 +488,13 @@ int main() {
         glm::mat4 groundPos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(groundPos));
         glDrawArrays(GL_TRIANGLES, 0, groundIndices.size());
-        glPopMatrix();
+
 
         // Draw the colliders
-        // Bind maze colliders VAO
-        glBindVertexArray(mazeCollidersVAO);
-        glm::mat4 collidersPos = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -4.0f, -10.0f));
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(collidersPos));
-        glDrawArrays(GL_TRIANGLES, 0, mazeCollidersIndices.size());
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(mazePos));
+        for (const auto& collider : MazeColliders) {
+            objLoaderWGroups.displayMesh(collider, GL_LINE); // wireframe mode
+        }
 
 
 

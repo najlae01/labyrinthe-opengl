@@ -1,5 +1,5 @@
 /*
-    The ObjLoader class is responsible for loading, saving, and displaying 3D mesh data
+    The ObjLoader class is responsible for loading and saving 3D mesh data
     from OBJ files. It works with a vector of Mesh objects to represent individual
     meshes or objects in a file or a scene
 */
@@ -22,8 +22,11 @@
 
 class ObjWGroupsLoader {
 public:
-    std::vector<Mesh> loadObj(std::string filename);
+    void loadObj(std::string filename);
     void displayMesh(const Mesh& mesh, GLenum renderMode);
+    void printMeshFaces(Mesh currentMesh);
+    void StoreFacesValuesInData();
+    std::vector<Mesh> Meshes;
 
 
 private:
